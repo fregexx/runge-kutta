@@ -15,6 +15,6 @@ public class DiffSystem1 extends DiffSystem {
 
     @Override
     public List<Double> getInitialConditions() {
-        return Arrays.asList(1.0, 0.0);
+        return Arrays.asList(0.0, 0.0);
     }
 }

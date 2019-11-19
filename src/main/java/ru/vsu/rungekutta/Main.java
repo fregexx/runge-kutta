@@ -1,23 +1,15 @@
 package ru.vsu.rungekutta;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import ru.vsu.rungekutta.system1.F1;
-import ru.vsu.rungekutta.system2.F2;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Application {
@@ -26,17 +18,17 @@ public class Main extends Application {
     private LineChart<Number, Number> chart;
 
     @FXML
-    void onActionDrawCircle(ActionEvent event) {
+    void onActionSolve(ActionEvent event) {
         double a = 0;
         double b = 1;
-        int n = 50;
+        int n = 100;
         double[] t = new double[n + 1];
         for (int i = 0; i < n + 1; i++) {
             t[i] = a + (b - a) * i / n;
         }
         double h = t[1] - t[0];
 
-        solveSystem(n, h, t, DiffSystems.system2);
+        solveSystem(n, h, t, DiffSystems.system1);
         System.out.println();
     }
 

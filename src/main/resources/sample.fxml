@@ -18,7 +18,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </LineChart>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionDrawCircle" prefHeight="51.0" prefWidth="500.0" text="Solve" textAlignment="CENTER" />
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onActionSolve" prefHeight="51.0" prefWidth="500.0" text="Solve" textAlignment="CENTER" />
          </children>
       </VBox>
    </children>

@@ -7,8 +7,8 @@ public class RungeKutta {
         return approxY(h, xPrev, k);
     }
 
-    double approxY(double h, double y, double[] k) {
-        return y + h * (k[0] + 2 * k[1] + 2 * k[2] + k[3]) / 6;
+    double approxY(double h, double xPrev, double[] k) {
+        return xPrev + h * (k[0] + 2 * k[1] + 2 * k[2] + k[3]) / 6;
     }
 
     double[] getK(double h, double t, double[] x, Function f) {
