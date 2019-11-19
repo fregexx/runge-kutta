@@ -1,5 +1,5 @@
 package ru.vsu.rungekutta;
 
 public interface Function {
-    public double solve(Double t, Double... vars);
+    public double solve(double t, double[] x);
 }

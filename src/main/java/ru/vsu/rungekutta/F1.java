@@ -2,11 +2,11 @@ package ru.vsu.rungekutta;
 
 public class F1 implements Function {
     @Override
-    public double solve(Double t, Double... vars) {
-        return vars[0] + Math.exp(t);
+    public double solve(double t, double[] x) {
+        return x[0] + Math.exp(t);
     }
 
-    public double exactValue(Double t, Double vars) {
-        return Math.exp(t) * t;
+    public double exactValue(double t) {
+        return 1 + Math.exp(t) * t;
     }
 }
