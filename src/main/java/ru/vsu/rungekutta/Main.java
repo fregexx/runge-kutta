@@ -14,13 +14,13 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ru.vsu.rungekutta.system1.F1;
+import ru.vsu.rungekutta.system2.F2;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Main extends Application {
-
-    @FXML
-    private HBox hbox;
 
     @FXML
     private LineChart<Number, Number> chart;
@@ -29,54 +29,65 @@ public class Main extends Application {
     void onActionDrawCircle(ActionEvent event) {
         double a = 0;
         double b = 1;
-        int n = 10;
-        double[] x = new double[n + 1];
+        int n = 50;
+        double[] t = new double[n + 1];
         for (int i = 0; i < n + 1; i++) {
-            x[i] = a + (b - a) * i / n;
+            t[i] = a + (b - a) * i / n;
         }
-        double[] t = Arrays.copyOf(x, x.length);
+        double h = t[1] - t[0];
 
-        double[] x1 = new double[n + 1];
-        double[] x2 = new double[n + 1];
-        x1[0] = 1;
-        x2[0] = 0;
-
-        double h = x[1] - x[0];
-        RungeKutta rungeKutta = new RungeKutta();
-
-        for (int i = 0; i < n; i++) {
-            x1[i + 1] = rungeKutta.solve(new F0(), h, t[i], new double[]{x1[i]}, x1[i]);
-//            x1[i + 1] = rungeKutta.solve(new F1(), h, t[i], new double[]{x1[i]}, x1[i]);
-//            x2[i + 1] = rungeKutta.solve(new F2(), h, t[i], new double[]{x1[i], x2[i]}, x2[i]);
-
-            double exactValue = new F0().exactValue(x[i + 1]);
-//            double exactValueF1 = new F1().exactValue(x[i + 1]);
-//            double exactValueF2 = new F2().exactValue(x[i + 1]);
-            System.out.println("Погрешность1 = " + Math.abs(x1[i + 1] - exactValue));
-//            System.out.println("ПогрешностьF1 = " + Math.abs(x1[i + 1] - exactValueF1));
-//            System.out.println("ПогрешностьF2 = " + Math.abs(x2[i + 1] - exactValueF2));
-        }
-
-        drawErrorChart(n, t, x1, new F0());
-
+        solveSystem(n, h, t, DiffSystems.system2);
         System.out.println();
     }
 
-    private void drawErrorChart(int n, double[] t, double[] x, Function function) {
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        series1.setName("Погрешность");
+    public void solveSystem(int n, double h, double[] t, DiffSystem system) {
+        List<Function> functions = system.getFunctions();
+        List<Double> initialConditions = system.getInitialConditions();
+        RungeKutta rungeKutta = new RungeKutta();
+        double[] x1 = new double[n + 1];
+        double[] x2 = new double[n + 1];
+        x1[0] = initialConditions.get(0);
+        x2[0] = initialConditions.get(1);
 
         for (int i = 0; i < n; i++) {
-            double exactValue = function.exactValue(t[i]);
-            series1.getData().add(new XYChart.Data<>(t[i], Math.abs(x[i] - exactValue)));
+            x1[i + 1] = rungeKutta.solve(functions.get(0), h, t[i], new double[]{x1[i], x2[i]}, x1[i]);
+            x2[i + 1] = rungeKutta.solve(functions.get(1), h, t[i], new double[]{x1[i], x2[i]}, x2[i]);
         }
+
+        printErrorValues(n, t, x1, functions.get(0));
+        printErrorValues(n, t, x2, functions.get(1));
+
+        drawErrorChart(n, t, x1, x2, system);
+    }
+
+    private void printErrorValues(int n, double[] t, double[] x, Function function) {
+        for (int i = 0; i < n; i++) {
+            double exactValue = function.exactValue(t[i]);
+            System.out.println("Погрешность = " + Math.abs(x[i] - exactValue));
+        }
+    }
+
+    private void drawErrorChart(int n, double[] t, double[] x, double[] x2, DiffSystem diffSystem) {
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+        series1.setName("Погрешность X1");
+        series2.setName("Погрешность X2");
+
+        for (int i = 0; i < n + 1; i++) {
+            series1.getData().add(new XYChart.Data<>(t[i], Math.abs(x[i] - diffSystem.getFunctions().get(0).exactValue(t[i]))));
+            series2.getData().add(new XYChart.Data<>(t[i], Math.abs(x2[i] - diffSystem.getFunctions().get(1).exactValue(t[i]))));
+        }
+        chart.setCreateSymbols(false);
         chart.getData().add(series1);
+        chart.getData().add(series2);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("styles.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

@@ -1,4 +1,6 @@
-package ru.vsu.rungekutta;
+package ru.vsu.rungekutta.system0;
+
+import ru.vsu.rungekutta.Function;
 
 public class F0 implements Function {
 

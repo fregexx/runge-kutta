@@ -1,4 +1,6 @@
-package ru.vsu.rungekutta;
+package ru.vsu.rungekutta.system1;
+
+import ru.vsu.rungekutta.Function;
 
 public class F2 implements Function {
     @Override
