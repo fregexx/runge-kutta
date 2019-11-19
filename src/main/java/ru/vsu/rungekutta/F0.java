@@ -7,7 +7,8 @@ public class F0 implements Function {
         return t + x[0];
     }
 
-    public double getExactValue(double t){
+    @Override
+    public double exactValue(double t){
         return 2 * Math.exp(t) - t - 1;
     }
 }

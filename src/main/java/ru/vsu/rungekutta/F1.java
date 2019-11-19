@@ -6,7 +6,8 @@ public class F1 implements Function {
         return x[0] + Math.exp(t);
     }
 
-    public double exactValue(double t) {
+    @Override
+    public double exactValue(double t){
         return 1 + Math.exp(t) * t;
     }
 }
