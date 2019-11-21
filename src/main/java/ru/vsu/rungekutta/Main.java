@@ -49,6 +49,7 @@ public class Main extends Application {
         printErrorValues(n, t, x1, functions.get(0));
         printErrorValues(n, t, x2, functions.get(1));
 
+//        drawChart(n, t, x1, x2, system);
         drawErrorChart(n, t, x1, x2, system);
     }
 
@@ -57,6 +58,21 @@ public class Main extends Application {
             double exactValue = function.exactValue(t[i]);
             System.out.println("Погрешность = " + Math.abs(x[i] - exactValue));
         }
+    }
+
+    private void drawChart(int n, double[] t, double[] x, double[] x2, DiffSystem diffSystem) {
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+        series1.setName("X1");
+        series2.setName("X2");
+
+        for (int i = 0; i < n + 1; i++) {
+            series1.getData().add(new XYChart.Data<>(t[i], Math.abs(x[i])));
+            series2.getData().add(new XYChart.Data<>(t[i], Math.abs(x2[i])));
+        }
+        chart.setCreateSymbols(false);
+        chart.getData().add(series1);
+        chart.getData().add(series2);
     }
 
     private void drawErrorChart(int n, double[] t, double[] x, double[] x2, DiffSystem diffSystem) {
