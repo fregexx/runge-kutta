@@ -65,14 +65,14 @@ public class DiffSystem3 extends DiffSystem {
         return 373 + alpha * t;
     }
 
-    public double J(double t, double[][] values) {
+    public double J(double t, double[]values) {
         double sumChisl = 0;
         double sumZnam = 0;
         for (int i = 1; i < 4; i++) {
-            sumChisl += q[i] * m[i] * values[][];
+            sumChisl += q[i] * m[i] * values[i];
         }
         for (int i = 0; i < 6; i++) {
-            sumZnam += m[i] * values[][];
+            sumZnam += m[i] * values[i];
         }
         return sumChisl / sumZnam;
     }
