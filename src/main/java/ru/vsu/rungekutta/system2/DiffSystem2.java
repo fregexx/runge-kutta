@@ -8,6 +8,10 @@ import java.util.List;
 
 public class DiffSystem2 extends DiffSystem {
 
+    private List<java.util.function.Function<Double, Double>> exactFunctions = Arrays.asList(
+            t -> 4 * Math.exp(-t) - Math.exp(2 * t),
+            t -> Math.exp(-t) - Math.exp(2 * t));
+
     @Override
     public List<Function> getFunctions() {
         return Arrays.asList(new F1(), new F2());
@@ -16,5 +20,10 @@ public class DiffSystem2 extends DiffSystem {
     @Override
     public List<Double> getInitialConditions() {
         return Arrays.asList(3.0, 0.0);
+    }
+
+    @Override
+    public double getExactValue(int functionIndex, double t) {
+        return exactFunctions.get(functionIndex).apply(t);
     }
 }

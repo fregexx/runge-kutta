@@ -2,31 +2,34 @@ package ru.vsu.rungekutta.system3;
 
 import ru.vsu.rungekutta.DiffSystem;
 import ru.vsu.rungekutta.Function;
-import ru.vsu.rungekutta.system2.F1;
-import ru.vsu.rungekutta.system2.F2;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class DiffSystem3 extends DiffSystem {
 
-    private double[] U = {15.19, 8.18, 13.198, 3.524, 4723.7, 423.7, 204.41, 1.466E-6, 0.013, 0.09, 5.428E-6, 0.024, 5.92E-6};
-    private double[] E = {25E3, 25E3, 25E3, 25E3, 40E3, 40E3, 40E3, 20E3, 20E3, 20E3, 20E3, 20E3, 20E3};
-    private int m0 = 18;
-    private int[] m = {84, 56, 42, 28, 92, 16};
-    private double T = 900;
-    private int G = 3500;
-    private int Gp = 1750;
+    private final double[] U = {15.19, 8.18, 13.198, 3.524, 4723.7, 423.7, 204.41, 1.466E-6, 0.013, 0.09, 5.428E-6, 0.024, 5.92E-6};
+    private final double[] E = {25E3, 25E3, 25E3, 25E3, 40E3, 40E3, 40E3, 20E3, 20E3, 20E3, 20E3, 20E3, 20E3};
+    private final int m0 = 18;
+    private final int[] m = {84, 56, 42, 28, 92, 16};
+    private final double T = 900;
+    private final int G = 3500;
+    private final int Gp = 1750;
+    private final double[] R = initR();
 
-    public double R(int i) {
-        return U[i] * Math.exp(23 - E[i] / T);
+    private double[] initR() {
+        double[] R = new double[13];
+        for (int i = 0; i < 13; i++) {
+            R[i] = U[i] * Math.exp(23 - E[i] / T);
+        }
+        return R;
     }
 
     private double p(double t) { //давление на расст t
         return 5 - t / 60;
     }
 
-    public double v(double t, double[] x) {
+    private double v(double t, double[] x) {
         double sum = 0;
         for (int i = 0; i < 6; i++) {
             sum += m[i] * x[i];
@@ -38,17 +41,22 @@ public class DiffSystem3 extends DiffSystem {
         return 509.209 * p(t) * vSum;
     }
 
-    public double f1(double t, double[] x) {
-        return
-    }
-
-    @Override
     public List<Function> getFunctions() {
-        return Arrays.asList(new F1(), new F2());
+        return Arrays.asList(
+                (t, x) -> -(R[0] + R[1] + R[2] + R[3]) * x[0] * v(t, x),
+                (t, x) -> (R[2] * x[0] - (R[5] + R[6] + R[9] + R[12]) * x[1]) * v(t, x),
+                (t, x) -> (R[1] * x[0] + R[5] * x[1] - (R[4] + R[8] + R[11]) * x[2]) * v(t, x),
+                (t, x) -> (R[0] * x[0] + R[6] * x[1] + R[5] * x[2] - (R[7] + R[10]) * x[3]) * v(t, x),
+                (t, x) -> (R[9] * x[1] + R[8] * x[2] + R[7] * x[3]) * v(t, x),
+                (t, x) -> (R[3] * x[0] + R[12] * x[1] + R[11] * x[2] + R[10] * x[3]) * v(t, x));
     }
 
-    @Override
     public List<Double> getInitialConditions() {
         return Arrays.asList(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
+
+    @Override
+    public double getExactValue(int functionIndex, double t) {
+        return 0;
     }
 }

@@ -8,8 +8,8 @@ public class F1 implements Function {
         return -2 * x[0] + 4 * x[1];
     }
 
-    @Override
-    public double exactValue(double t) {
-        return 4 * Math.exp(-t) - Math.exp(2 * t);
-    }
+//    @Override
+//    public double exactValue(double t) {
+//        return 4 * Math.exp(-t) - Math.exp(2 * t);
+//    }
 }
