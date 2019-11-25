@@ -1,4 +1,4 @@
-package ru.vsu.rungekutta.system1;
+package ru.vsu.rungekutta.systems;
 
 import ru.vsu.rungekutta.DiffSystem;
 import ru.vsu.rungekutta.Function;

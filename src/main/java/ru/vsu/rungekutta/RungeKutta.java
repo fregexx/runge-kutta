@@ -2,15 +2,6 @@ package ru.vsu.rungekutta;
 
 public class RungeKutta {
 
-//    public DiffSystem solveSystem(DiffSystem diffSystem){
-//        double[][] values = diffSystem.getValues();
-//        for (int n = 0; n < N; n++) {
-//            for (int f = 0; f < diffSystem.getFunctions().size(); f++) {
-//                results[i+1][f] = solve(diffSystem.getFunction(f), h, t[i], diffSystem.getValues(n), diffSystem.getValue(n,f));
-//            }
-//        }
-//    }
-
     public double solve(Function f, double h, double t, double[] x, double xPrev) {
         double[] k = getK(h, t, x, f);
         return approxY(h, xPrev, k);

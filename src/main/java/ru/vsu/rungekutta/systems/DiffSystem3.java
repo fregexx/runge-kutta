@@ -1,4 +1,4 @@
-package ru.vsu.rungekutta.system3;
+package ru.vsu.rungekutta.systems;
 
 import ru.vsu.rungekutta.DiffSystem;
 import ru.vsu.rungekutta.Function;
@@ -16,6 +16,7 @@ public class DiffSystem3 extends DiffSystem {
     private final int G = 3500;
     private final int Gp = 1750;
     private final double[] R = initR();
+    private final int[] q = {0, 78, 140, 140, 0, 0};
 
     private double[] initR() {
         double[] R = new double[13];
@@ -58,5 +59,21 @@ public class DiffSystem3 extends DiffSystem {
     @Override
     public double getExactValue(int functionIndex, double t) {
         return 0;
+    }
+
+    public double T(double t, double alpha) {
+        return 373 + alpha * t;
+    }
+
+    public double J(double t, double[][] values) {
+        double sumChisl = 0;
+        double sumZnam = 0;
+        for (int i = 1; i < 4; i++) {
+            sumChisl += q[i] * m[i] * values[][];
+        }
+        for (int i = 0; i < 6; i++) {
+            sumZnam += m[i] * values[][];
+        }
+        return sumChisl / sumZnam;
     }
 }

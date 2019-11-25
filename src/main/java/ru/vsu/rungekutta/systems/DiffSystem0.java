@@ -1,4 +1,4 @@
-package ru.vsu.rungekutta.system0;
+package ru.vsu.rungekutta.systems;
 
 import ru.vsu.rungekutta.DiffSystem;
 import ru.vsu.rungekutta.Function;
@@ -13,7 +13,7 @@ public class DiffSystem0 extends DiffSystem {
 
     @Override
     public List<Function> getFunctions() {
-        return Arrays.asList(new F0());
+        return Arrays.asList((t, x) -> 2 * Math.exp(t) - t - 1);
     }
 
     @Override

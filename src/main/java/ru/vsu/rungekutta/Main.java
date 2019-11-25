@@ -46,8 +46,8 @@ public class Main extends Application {
                 results[i + 1][f] = rungeKutta.solve(functions.get(f), h, t[i], results[i], results[i][f]);
             }
         }
-//        drawChart(N, t, results, diffSystem);
-        drawErrorChart(N, t, results, diffSystem);
+        drawChart(N, t, results, diffSystem);
+//        drawErrorChart(N, t, results, diffSystem);
     }
 
     private void drawChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
