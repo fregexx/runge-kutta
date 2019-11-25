@@ -18,6 +18,10 @@ public class DiffSystem3 extends DiffSystem {
     private final double[] R = initR();
     private final int[] q = {0, 78, 140, 140, 0, 0};
 
+    private double getT(java.util.function.Function<Double, Double> T, double t){
+        return T.apply(t);
+    }
+
     private double[] initR() {
         double[] R = new double[13];
         for (int i = 0; i < 13; i++) {
@@ -30,18 +34,19 @@ public class DiffSystem3 extends DiffSystem {
         return 5 - t / 60;
     }
 
-    private double v(double t, double[] x) {
+    private double v(double t, double[] x, java.util.function.Function<Double, Double> T) {
         double sum = 0;
         for (int i = 0; i < 6; i++) {
             sum += m[i] * x[i];
         }
         double vSum = 0;
         for (int i = 0; i < 6; i++) {
-            vSum += m[i] * x[i] / (T * (G + Gp * (sum / m0)));
+            vSum += m[i] * x[i] / (T. * (G + Gp * (sum / m0)));
         }
         return 509.209 * p(t) * vSum;
     }
 
+    @Override
     public List<Function> getFunctions() {
         return Arrays.asList(
                 (t, x) -> -(R[0] + R[1] + R[2] + R[3]) * x[0] * v(t, x),
@@ -52,6 +57,7 @@ public class DiffSystem3 extends DiffSystem {
                 (t, x) -> (R[3] * x[0] + R[12] * x[1] + R[11] * x[2] + R[10] * x[3]) * v(t, x));
     }
 
+    @Override
     public List<Double> getInitialConditions() {
         return Arrays.asList(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
@@ -59,10 +65,6 @@ public class DiffSystem3 extends DiffSystem {
     @Override
     public double getExactValue(int functionIndex, double t) {
         return 0;
-    }
-
-    public double T(double t, double alpha) {
-        return 373 + alpha * t;
     }
 
     public double J(double t, double[]values) {
