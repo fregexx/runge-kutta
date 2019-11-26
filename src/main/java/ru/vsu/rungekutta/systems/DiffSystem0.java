@@ -13,7 +13,7 @@ public class DiffSystem0 extends DiffSystem {
 
     @Override
     public List<Function> getFunctions() {
-        return Arrays.asList((t, x) -> 2 * Math.exp(t) - t - 1);
+        return Arrays.asList((t, x) -> t + x[0]);
     }
 
     @Override

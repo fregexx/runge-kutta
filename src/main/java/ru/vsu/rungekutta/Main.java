@@ -19,38 +19,28 @@ public class Main extends Application {
 
     @FXML
     void onActionSolve(ActionEvent event) {
-        int N = 50;
+        ChemicalReactor chemicalReactor = new ChemicalReactor();
+        Solution solution = chemicalReactor.solve();
+       /* int N = 100;
         double a = 0;
-//        double b = 1;
-        double b = 180;
+        double b = 1;
+//        double b = 180;
 
-        double[] t = new double[N + 1];
-        for (int i = 0; i < N + 1; i++) {
-            t[i] = a + (b - a) * i / N;
-        }
-
-        double h = t[1] - t[0];
-
-        DiffSystem diffSystem = DiffSystems.system3;
+        DiffSystem diffSystem = DiffSystems.system0;
 
         RungeKutta rungeKutta = new RungeKutta();
+        Solution solution = rungeKutta.solveSystem(diffSystem, a, b, N);*/
 
-        List<Function> functions = diffSystem.getFunctions();
-        double[][] results = new double[N + 1][diffSystem.size()];
-        for (int f = 0; f < functions.size(); f++) {
-            results[0][f] = diffSystem.getInitialConditions().get(f);
-        }
+        double[] t = solution.getT();
+        double[][] x = solution.getX();
+        int N = solution.getN();
+        DiffSystem diffSystem = solution.getDiffSystem();
 
-        for (int i = 0; i < N; i++) {
-            for (int f = 0; f < functions.size(); f++) {
-                results[i + 1][f] = rungeKutta.solve(functions.get(f), h, t[i], results[i], results[i][f]);
-            }
-        }
-        drawChart(N, t, results, diffSystem);
-//        drawErrorChart(N, t, results, diffSystem);
+        drawChart(N, t, x, diffSystem);
+//        drawErrorChart(N, t, x, diffSystem);
     }
 
-    private void drawChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
+    public void drawChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
         for (int f = 0; f < diffSystem.size(); f++) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName("X" + f);
@@ -61,7 +51,7 @@ public class Main extends Application {
         }
     }
 
-    private void drawErrorChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
+    public void drawErrorChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
         for (int f = 0; f < diffSystem.size(); f++) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName("Погрешность X" + f);

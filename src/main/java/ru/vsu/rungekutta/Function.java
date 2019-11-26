@@ -2,5 +2,5 @@ package ru.vsu.rungekutta;
 
 @FunctionalInterface
 public interface Function {
-    public double solve(double t, double[] x);
+    public double apply(double t, double[] x);
 }

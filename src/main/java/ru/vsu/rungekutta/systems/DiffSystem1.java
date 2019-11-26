@@ -9,13 +9,13 @@ import java.util.List;
 public class DiffSystem1 extends DiffSystem {
 
     private List<java.util.function.Function<Double, Double>> exactFunctions = Arrays.asList(
-            t -> Math.exp(t) * t,
+            t -> 1 + Math.exp(t) * t,
             t -> Math.exp(t) * (0.5 * t * t - t));
 
     @Override
     public List<Function> getFunctions() {
         return Arrays.asList(
-                (t, x) -> 2 * x[0] + Math.exp(t),
+                (t, x) -> x[0] + Math.exp(t),
                 (t, x) -> x[0] + x[1] - Math.exp(t));
     }
 

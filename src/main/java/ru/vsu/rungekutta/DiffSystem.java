@@ -20,6 +20,10 @@ public abstract class DiffSystem {
     public abstract List<Function> getFunctions();
     public abstract List<Double> getInitialConditions();
     public abstract double getExactValue(int functionIndex, double t);
+
+    public double J(double[] values){
+        return 0;
+    }
 //
 //    public void init(int a, int b, int N) {
 //        initGrid(a, b, N);

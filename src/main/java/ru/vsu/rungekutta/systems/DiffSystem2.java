@@ -15,7 +15,7 @@ public class DiffSystem2 extends DiffSystem {
     @Override
     public List<Function> getFunctions() {
         return Arrays.asList(
-                (t, x) -> -2 * x[0] + 4 * x[1],
+                (t, x) -> -2 * x[0] + x[1],
                 (t, x) -> -x[0] + 3 * x[1]);
     }
 
