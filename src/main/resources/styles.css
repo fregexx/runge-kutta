@@ -1,4 +1,12 @@
-/*.chart-symbol {*/
-/*    -fx-background-radius: 1px ;*/
-/*    -fx-padding: 1px ;*/
-/*}*/
+.chart-line-symbol {
+    /*-fx-background-radius: 10px ;*/
+    /*-fx-padding: 10px ;*/
+}
+
+.chart {
+    -fx-create-symbols: false;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 2px;
+}

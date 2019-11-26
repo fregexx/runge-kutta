@@ -20,8 +20,8 @@ public class Main extends Application {
     @FXML
     void onActionSolve(ActionEvent event) {
         ChemicalReactor chemicalReactor = new ChemicalReactor();
-//        Solution solution = chemicalReactor.solve();
-        Solution solution = chemicalReactor.optimize();
+        Solution solution = chemicalReactor.solve();
+//        Solution solution = chemicalReactor.optimize();
        /* int N = 100;
         double a = 0;
         double b = 1;
@@ -75,7 +75,7 @@ public class Main extends Application {
 
     @FXML
     public void initialize() {
-        chart.setCreateSymbols(false);
+//        chart.setCreateSymbols(false);
     }
 
     public static void main(String[] args) {
