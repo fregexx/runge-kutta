@@ -20,7 +20,8 @@ public class Main extends Application {
     @FXML
     void onActionSolve(ActionEvent event) {
         ChemicalReactor chemicalReactor = new ChemicalReactor();
-        Solution solution = chemicalReactor.solve();
+//        Solution solution = chemicalReactor.solve();
+        Solution solution = chemicalReactor.optimize();
        /* int N = 100;
         double a = 0;
         double b = 1;
@@ -44,7 +45,8 @@ public class Main extends Application {
         for (int f = 0; f < diffSystem.size(); f++) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName("X" + f);
-            for (int i = 0; i < n + 1; i++) {
+            int step = results.length/1000;
+            for (int i = 0; i < n + 1; i+=step) {
                 series.getData().add(new XYChart.Data<>(t[i], results[i][f]));
             }
             chart.getData().add(series);

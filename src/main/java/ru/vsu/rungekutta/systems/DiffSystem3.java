@@ -74,7 +74,7 @@ public class DiffSystem3 extends DiffSystem {
     }
 
     @Override
-    public double J(double[] values) {
+    public double getJ(double[] values) {
         double sumChisl = 0;
         double sumZnam = 0;
         for (int i = 1; i < 4; i++) {

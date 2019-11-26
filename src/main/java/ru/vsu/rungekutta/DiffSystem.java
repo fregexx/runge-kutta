@@ -21,7 +21,7 @@ public abstract class DiffSystem {
     public abstract List<Double> getInitialConditions();
     public abstract double getExactValue(int functionIndex, double t);
 
-    public double J(double[] values){
+    public double getJ(double[] values){
         return 0;
     }
 //
