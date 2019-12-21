@@ -11,10 +11,58 @@ public class ChemicalReactor {
     double a = 0;
     double b = 180;
 
+    private double grad(double h, double J0, double Jh) {
+        return (Jh - J0) / h;
+    }
+
+    public Solution gradMethod() {
+        double beta = 1;
+        double alpha = 1;
+
+        while (true) {
+            System.out.println("alpha = " + alpha);
+            System.out.println("beta = " + beta);
+            DiffSystem diffSystemA = new DiffSystem3(getTFunction(alpha));
+            Solution solution = rungeKutta.solveSystem(diffSystemA, a, b, N);
+            double h = solution.getH();
+            double[][] xA = solution.getX();
+            double j0 = diffSystemA.getJ(xA[xA.length - 1]);    // J(alpha)
+            System.out.println("jA = " + j0);
+
+            DiffSystem diffSystemAH = new DiffSystem3(getTFunction(alpha + h));
+            double[][] xAH = rungeKutta.solveSystem(diffSystemAH, a, b, N).getX();
+            double jH = diffSystemA.getJ(xAH[xA.length - 1]);    // J(alpha+h)
+            System.out.println("jH = " + jH);
+
+            double grad = grad(h, j0, jH);
+            System.out.println("grad = " + grad);
+
+            if(Math.abs(grad) < epsilon){
+                System.out.println("Found solution. J = " + j0);
+                return solution;
+            }
+
+            double alpha1 = alpha + beta * grad;
+            System.out.println("alpha1 = " + alpha1);
+            DiffSystem diffSystemB = new DiffSystem3(getTFunction(alpha1));
+            double[][] xB = rungeKutta.solveSystem(diffSystemB, a, b, N).getX();
+            double jB = diffSystemA.getJ(xB[xA.length - 1]);    // J(alpha1)
+
+            System.out.println("jB = " + jB);
+
+            if (jB > j0) {
+                alpha = alpha1;
+            } else {
+                beta = beta / 2;
+            }
+            System.out.println("----------------------------");
+        }
+    }
+
     public Solution optimize() {
         int k = 0;
         double l = 0;
-        double r = 10000;
+        double r = 10;
         double alpha;
         do {
             k++;
@@ -58,10 +106,14 @@ public class ChemicalReactor {
         return solution;
     }
 
-    private Function<Double, Double> getTFunction(double alpha) {
+    public Function<Double, Double> getTFunction(double alpha) {
 //        return t -> 900.0;
 //        return t -> 373 + Math.pow(t / 180, alpha) * (1500 - 373);
         return t -> 373 + Math.sin(Math.pow(t / 180, alpha) * Math.PI / 2) * (1500 - 373);
+    }
+
+    public Function<Double, Double> getTFunction2(double alpha1, double alpha2) {
+        return t -> 373 + 2 * (alpha1 - 373) / Math.PI * Math.atan(alpha2 * t);
     }
 
     public Solution solve() {

@@ -11,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class Main extends Application {
 
@@ -20,8 +21,9 @@ public class Main extends Application {
     @FXML
     void onActionSolve(ActionEvent event) {
         ChemicalReactor chemicalReactor = new ChemicalReactor();
-        Solution solution = chemicalReactor.solve();
+//        Solution solution = chemicalReactor.solve();
 //        Solution solution = chemicalReactor.optimize();
+        Solution solution = chemicalReactor.gradMethod();
        /* int N = 100;
         double a = 0;
         double b = 1;
@@ -36,17 +38,29 @@ public class Main extends Application {
         double[][] x = solution.getX();
         int N = solution.getN();
         DiffSystem diffSystem = solution.getDiffSystem();
+        Function<Double, Double> tFunction = chemicalReactor.getTFunction(9.936132812499999);
 
         drawChart(N, t, x, diffSystem);
+//        drawTChart(N, t, tFunction);
 //        drawErrorChart(N, t, x, diffSystem);
+    }
+
+    public void drawTChart(int n, double[] t, Function<Double, Double> function) {
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Температура");
+        int step = t.length / 1000;
+        for (int i = 0; i < n + 1; i+=step) {
+            series.getData().add(new XYChart.Data<>(t[i], function.apply(t[i])));
+        }
+        chart.getData().add(series);
     }
 
     public void drawChart(int n, double[] t, double[][] results, DiffSystem diffSystem) {
         for (int f = 0; f < diffSystem.size(); f++) {
             XYChart.Series<Number, Number> series = new XYChart.Series<>();
             series.setName("X" + f);
-            int step = results.length/1000;
-            for (int i = 0; i < n + 1; i+=step) {
+            int step = results.length / 1000;
+            for (int i = 0; i < n + 1; i += step) {
                 series.getData().add(new XYChart.Data<>(t[i], results[i][f]));
             }
             chart.getData().add(series);
