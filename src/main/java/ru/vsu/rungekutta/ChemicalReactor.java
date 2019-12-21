@@ -11,8 +11,70 @@ public class ChemicalReactor {
     double a = 0;
     double b = 180;
 
+    private double[] grad2(double h, double J0, double J1h, double J2h) {
+        return new double[]{
+                (J1h-J0)/h,
+                (J2h-J0)/h
+        };
+    }
+
     private double grad(double h, double J0, double Jh) {
         return (Jh - J0) / h;
+    }
+
+    public Solution gradMethod2() {
+        double beta = 1;
+        double alpha10 = 1;
+        double alpha20 = 1;
+
+        while (true) {
+            System.out.println("alpha10 = " + alpha10);
+            System.out.println("alpha20 = " + alpha20);
+            System.out.println("beta10 = " + beta);
+            DiffSystem diffSystemA = new DiffSystem3(getTFunction2(alpha10,alpha20));
+            Solution solution = rungeKutta.solveSystem(diffSystemA, a, b, N);
+            double h = solution.getH();
+            double[][] xA = solution.getX();
+            double j0 = diffSystemA.getJ(xA[xA.length - 1]);    // J(alpha10, alpha20)
+            System.out.println("j0 = " + j0);
+
+            DiffSystem diffSystem0H = new DiffSystem3(getTFunction2(alpha10 + h, alpha20));
+            double[][] x1H = rungeKutta.solveSystem(diffSystem0H, a, b, N).getX();
+            double j1H = diffSystemA.getJ(x1H[xA.length - 1]);    // J(alpha10+h, alpha20)
+            System.out.println("j1H = " + j1H);
+
+            DiffSystem diffSystem1H = new DiffSystem3(getTFunction2(alpha10, alpha20+h));
+            double[][] x2H = rungeKutta.solveSystem(diffSystem1H, a, b, N).getX();
+            double j2H = diffSystemA.getJ(x2H[xA.length - 1]);    // J(alpha10, alpha20+h)
+            System.out.println("j2H = " + j2H);
+
+            double[] grad = grad2(h, j0, j1H, j2H);
+            System.out.println("grad = " + grad[0] + ":" + grad[1] + " Norm: " + Math.sqrt(grad[0]*grad[0] + grad[1]*grad[1]));
+
+            if(Math.sqrt(grad[0]*grad[0] + grad[1]*grad[1]) < epsilon){
+                System.out.println("Found solution. J = " + j0);
+                return solution;
+            }
+
+            double alpha11 = alpha10 + beta * grad[0];
+            double alpha21 = alpha10 + beta * grad[1];
+            System.out.println("alpha11 = " + alpha11);
+            System.out.println("alpha21 = " + alpha21);
+
+            DiffSystem diffSystemB = new DiffSystem3(getTFunction2(alpha11, alpha21));
+            double[][] xB = rungeKutta.solveSystem(diffSystemB, a, b, N).getX();
+            double jB = diffSystemA.getJ(xB[xA.length - 1]);    // J(alpha11, alpha21)
+
+            System.out.println("jB = " + jB);
+
+            if (jB > j0) {
+                alpha10 = alpha11;
+                alpha20 = alpha21;
+            } else {
+                beta = beta / 2;
+            }
+            System.out.println("----------------------------");
+        }
     }
 
     public Solution gradMethod() {

@@ -23,7 +23,8 @@ public class Main extends Application {
         ChemicalReactor chemicalReactor = new ChemicalReactor();
 //        Solution solution = chemicalReactor.solve();
 //        Solution solution = chemicalReactor.optimize();
-        Solution solution = chemicalReactor.gradMethod();
+//        Solution solution = chemicalReactor.gradMethod();
+        Solution solution = chemicalReactor.gradMethod2();
        /* int N = 100;
         double a = 0;
         double b = 1;
