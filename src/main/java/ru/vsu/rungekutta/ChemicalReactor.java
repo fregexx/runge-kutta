@@ -9,8 +9,10 @@ public class ChemicalReactor {
     // J: 29.245521627242102  alpha: 9.936132812499999   100-180
     // J = 28.951839960337445  alpha = 3.1551703955501518   grad1 100-180
     // J = 29.0198793533777  alpha = 4.00262231377415   grad1 100-180 beta=10
+    // 1 1 1 29.464 1-iter
+    // 400 1000 1 29.122 1-iter
     private RungeKutta rungeKutta = new RungeKutta();
-    private static final double epsilon = 0.1;
+    private static final double epsilon = 0.01;
     int N = 180000;
     double a = 0;
     double b = 180;
@@ -27,9 +29,9 @@ public class ChemicalReactor {
     }
 
     public Solution gradMethod2() {
-        double beta = 1;
-        double alpha10 = 1;
-        double alpha20 = 1;
+        double beta = 10;
+        double alpha10 = 373;
+        double alpha20 = 1500;
 
         while (true) {
             System.out.println("alpha10 = " + alpha10);
@@ -40,20 +42,20 @@ public class ChemicalReactor {
             double h = solution.getH();
             double[][] xA = solution.getX();
             double j0 = diffSystemA.getJ(xA[xA.length - 1]);    // J(alpha10, alpha20)
-            System.out.println("j0 = " + j0);
+            System.out.println("J(alpha10, alpha20) = " + j0);
 
             DiffSystem diffSystem0H = new DiffSystem3(getTFunction2(alpha10 + h, alpha20));
             double[][] x1H = rungeKutta.solveSystem(diffSystem0H, a, b, N).getX();
             double j1H = diffSystemA.getJ(x1H[xA.length - 1]);    // J(alpha10+h, alpha20)
-            System.out.println("j1H = " + j1H);
+            System.out.println("J(alpha10+h, alpha20) = " + j1H);
 
             DiffSystem diffSystem1H = new DiffSystem3(getTFunction2(alpha10, alpha20 + h));
             double[][] x2H = rungeKutta.solveSystem(diffSystem1H, a, b, N).getX();
             double j2H = diffSystemA.getJ(x2H[xA.length - 1]);    // J(alpha10, alpha20+h)
-            System.out.println("j2H = " + j2H);
+            System.out.println("J(alpha10, alpha20+h) = " + j2H);
 
             double[] grad = grad2(h, j0, j1H, j2H);
-            System.out.println("grad = " + grad[0] + ":" + grad[1] + " Norm: " + Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]));
+            System.out.println("grad = ( " + grad[0] + ", " + grad[1] + " ).  Norm(grad) = " + Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]));
 
             if (Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]) < epsilon) {
                 System.out.println("Found solution. J = " + j0);
@@ -179,16 +181,17 @@ public class ChemicalReactor {
     }
 
     public Function<Double, Double> getTFunction2(double alpha1, double alpha2) {
-        return t -> {
+        return t -> alpha1 + Math.sin(t / 180 * Math.PI / 2) * (alpha2 - alpha1);
+        /*return t -> alpha1 + (alpha2 - alpha1) / 180 * t;*/
+        /*return t -> {
             if (t < 30) {
                 return 373 + (alpha1 - 373) / 30 * t;
-            } else if(t < 150){
-                return alpha1 + (alpha2 - alpha1) / (150-30) * (t-30);
+            } else if (t < 150) {
+                return alpha1 + (alpha2 - alpha1) / (150 - 30) * (t - 30);
             } else {
-                return alpha2 + (1500 - alpha2) / (180-150) * (t-150);
+                return alpha2 + (1500 - alpha2) / (180 - 150) * (t - 150);
             }
-        };
-
+        };*/
 
         /*return t -> {
 //            double te = 373 + 2 * (alpha1 - 373) / Math.PI * Math.atan(alpha2 * t);

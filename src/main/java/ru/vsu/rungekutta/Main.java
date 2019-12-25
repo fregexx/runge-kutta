@@ -40,10 +40,10 @@ public class Main extends Application {
         int N = solution.getN();
         DiffSystem diffSystem = solution.getDiffSystem();
         Function<Double, Double> tFunction = chemicalReactor.getTFunction(9.936132812499999);
-//        Function<Double, Double> tFunction2 = chemicalReactor.getTFunction2(9.936132812499999);
+        Function<Double, Double> tFunction2 = chemicalReactor.getTFunction2(700, 1300);
 
         drawChart(N, t, x, diffSystem);
-//        drawTChart(N, t, tFunction);
+//        drawTChart(N, t, tFunction2);
 //        drawErrorChart(N, t, x, diffSystem);
     }
 
